@@ -1,0 +1,68 @@
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: elasticsearch
+#   labels:
+#     app: elasticsearch
+#     stack: logging
+# spec:
+#   rules:
+#   -
+#     # host: elasticsearch.minikube.localnet
+#     host: <YOUR_HOST>
+#     http:
+#       paths:
+#       - path: /
+#         backend:
+#           serviceName: elasticsearch
+#           servicePort: 9200
+# ---
+
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: kibana
+#   labels:
+#     app: kibana
+#     stack: logging
+#   annotations:
+#     ingress.kubernetes.io/auth-signin: https://$host/oauth2/start
+#     ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
+#     kubernetes.io/tls-acme: "true"
+# spec:
+#   rules:
+#   - host: <YOUR_HOST>
+#     http:
+#       paths:
+#       - path: /
+#         backend:
+#           serviceName: kibana
+#           servicePort: 5601
+#   tls:
+#   - secretName: kibana-tls
+#     hosts:
+#     - <YOUR_HOST>
+
+# ---
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: kibana-auth
+#   labels:
+#     app: kibana-auth
+#     stack: logging
+#   annotations:
+#     kubernetes.io/tls-acme: "true"
+# spec:
+#   rules:
+#   - host: <YOUR_HOST>
+#     http:
+#       paths:
+#       - path: /oauth2
+#         backend:
+#           serviceName: oauth2-proxy
+#           servicePort: 4180
+#   tls:
+#   - secretName: kibana-tls
+#     hosts:
+#     - <YOUR_HOST>

@@ -1,0 +1,173 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fluentd
+  namespace: monitoring-elk
+  labels:
+    app: fluentd
+    stack: logging
+rules:
+- apiGroups:
+  - extensions
+  resources:
+  - podsecuritypolicies
+  resourceNames:
+  - fluentd
+  verbs:
+  - use
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fluentd
+  namespace: monitoring-elk
+  labels:
+    app: fluentd
+    stack: logging
+subjects:
+- kind: ServiceAccount
+  name: fluentd
+  namespace: monitoring-elk
+roleRef:
+  kind: Role
+  name: fluentd
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fluentd
+  namespace: monitoring-elk
+  labels:
+    app: fluentd
+    stack: logging
+---
+apiVersion: extensions/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: fluentd
+  namespace: monitoring-elk
+  labels:
+    app: fluentd
+    stack: logging
+spec:
+  fsGroup:
+    rule: RunAsAny
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - emptyDir
+  - secret
+  - downwardAPI
+  - configMap
+  - persistentVolumeClaim
+  - projected
+  - hostPath
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fluentd
+  namespace: monitoring-elk
+  labels:
+    app: fluentd
+    stack: logging
+rules:
+- apiGroups: [""] # core API group
+  resources: ["pods", "namespaces"]
+  verbs: ["get", "watch", "list"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fluentd
+  namespace: monitoring-elk
+  labels:
+    app: fluentd
+    stack: loggin
+subjects:
+- kind: ServiceAccount
+  name: fluentd
+  namespace: monitoring-elk
+roleRef:
+  kind: ClusterRole
+  name: fluentd
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: elasticsearch
+  namespace: monitoring-elk
+  labels:
+    app: elasticsearch
+    stack: logging
+rules:
+- apiGroups:
+  - extensions
+  resources:
+  - podsecuritypolicies
+  resourceNames:
+  - elasticsearch
+  verbs:
+  - use
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: elasticsearch
+  namespace: monitoring-elk
+  labels:
+    app: elasticsearch
+    stack: logging
+subjects:
+- kind: ServiceAccount
+  name: elasticsearch
+  namespace: monitoring-elk
+roleRef:
+  kind: ClusterRole
+  name: elasticsearch
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: elasticsearch
+  namespace: monitoring-elk
+  labels:
+    app: elasticsearch
+    stack: logging
+---
+apiVersion: extensions/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: elasticsearch
+  namespace: monitoring-elk
+  labels:
+    app: elasticsearch
+    stack: logging
+spec:
+  fsGroup:
+    rule: RunAsAny
+  privileged: true
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  allowedCapabilities:
+  - 'IPC_LOCK'
+  - 'SYS_RESOURCE'
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - '*'
+  hostPID: true
+  hostIPC: true
+  hostNetwork: true
+  hostPorts:
+  - min: 1
+    max: 65536
