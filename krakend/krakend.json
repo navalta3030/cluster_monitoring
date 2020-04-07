@@ -1,0 +1,61 @@
+{
+  "version": 2,
+  "name": "KrakenD on k8s",
+  "port": 8080,
+  "cache_ttl": "3600s",
+  "timeout": "3s",
+  "github_com/devopsfaith/krakend-cors": {
+    "allow_origins": [
+      "*"
+    ],
+    "expose_headers": [
+      "Content-Length"
+    ],
+    "max_age": "12h",
+    "allow_methods": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "DELETE",
+      "CONNECT",
+      "OPTIONS",
+      "TRACE",
+      "PATCH"
+    ],
+    "allow_credentials": true,
+    "allow_headers": [
+      "Origin",
+      "Authorization",
+      "Content-Type",
+      "Accept",
+      "X-Auth-Token"
+    ]
+  },
+  "endpoints": [
+    {
+      "endpoint": "/api/ml",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "host": [
+            "http://sanic-server:8000"
+          ],
+          "url_pattern": "/"
+        }
+      ]
+    },
+    {
+      "endpoint": "/kibana",
+      "backend": [
+        {
+          "host": [
+            "http://kibana-logging:5601"
+          ],
+          "url_pattern": "/"
+        }
+      ]
+    }
+  ]
+}
