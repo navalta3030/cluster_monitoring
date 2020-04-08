@@ -14,27 +14,18 @@
     "max_age": "12h",
     "allow_methods": [
       "GET",
-      "HEAD",
-      "POST",
-      "PUT",
-      "DELETE",
-      "CONNECT",
-      "OPTIONS",
-      "TRACE",
-      "PATCH"
+      "POST"
     ],
     "allow_credentials": true,
     "allow_headers": [
       "Origin",
       "Authorization",
-      "Content-Type",
-      "Accept",
-      "X-Auth-Token"
+      "Content-Type"
     ]
   },
   "endpoints": [
     {
-      "endpoint": "/api/ml",
+      "endpoint": "/api",
       "method": "GET",
       "output_encoding": "json",
       "backend": [
@@ -47,15 +38,27 @@
       ]
     },
     {
-      "endpoint": "/kibana",
+      "endpoint": "/token",
       "backend": [
         {
           "host": [
-            "http://kibana-logging:5601"
+            "http://go-jwt:8000"
           ],
-          "url_pattern": "/"
+          "url_pattern": "/token"
         }
-      ]
+      ],
+      "extra_config": {
+        "github.com/devopsfaith/krakend-jose/signer": {
+          "alg": "HS256",
+          "kid": "sim2",
+          "keys-to-sign": [
+            "access_token",
+            "refresh_token"
+          ],
+          "jwk-url": "http://go-jwt:8080/auth.json",
+          "disable_jwk_security": true
+        }
+      }
     }
   ]
 }

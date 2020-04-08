@@ -4,14 +4,19 @@ metadata:
   name: ingress-nginx
 spec:
   rules:
+    - host: xray.marknavalta.com
     - host: localhost
       http:
         paths:
-          - path: /api/ml
-            backend:
-              serviceName: krakend-api-gateway
-              servicePort: 8080
           - path: /
             backend:
               serviceName: react-client
               servicePort: 3000
+          - path: /api
+            backend:
+              serviceName: krakend-api-gateway
+              servicePort: 8080
+          - path: /token
+            backend:
+              serviceName: krakend-api-gateway
+              servicePort: 8080
