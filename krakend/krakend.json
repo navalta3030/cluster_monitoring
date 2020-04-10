@@ -42,7 +42,7 @@
       "backend": [
         {
           "host": [
-            "http://go-jwt:8000"
+            "http://go-jwt:8020"
           ],
           "url_pattern": "/token"
         }
@@ -55,7 +55,7 @@
             "access_token",
             "refresh_token"
           ],
-          "jwk-url": "http://go-jwt:8080/auth.json",
+          "jwk-url": "http://go-jwt:8020/auth.json",
           "disable_jwk_security": true
         }
       }

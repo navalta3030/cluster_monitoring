@@ -1,0 +1,13 @@
+# Available Gateways
+  - /token
+    - Requirements
+      - Payload from the go-jwt
+    - Task
+      - Signs the token
+    - Return
+      - access_token
+      - refresh-token
+      - exp
+  - /api (Authenticated route)
+    - work in progress
+    - what's done is it's able to contact sanic-server
