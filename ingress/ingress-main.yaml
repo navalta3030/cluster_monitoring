@@ -12,11 +12,11 @@ spec:
             backend:
               serviceName: react-client
               servicePort: 3000
-          - path: /api
+          - path: /api # sanic-server
             backend:
               serviceName: krakend-api-gateway
               servicePort: 8080
           - path: /token
             backend:
-              serviceName: krakend-api-gateway
-              servicePort: 8080
+              serviceName: go-jwt
+              servicePort: 8020
