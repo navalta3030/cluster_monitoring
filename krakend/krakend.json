@@ -20,7 +20,7 @@
       "extra_config": {
         "github.com/devopsfaith/krakend-jose/validator": {
           "alg": "HS256",
-          "issuer": "https://krakend.io",
+          "issuer": "https://xray.marknavalta.com",
           "jwk-url": "http://go-jwt:8020/auth.json",
           "disable_jwk_security": true
         }

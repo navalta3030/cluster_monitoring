@@ -1,0 +1,35 @@
+apiVersion: apps/{{ template "version.fullname" .}}
+kind: Deployment
+metadata:
+  name: {{ template "krakend_api_gateway.fullname" .}}
+spec:
+  replicas: {{ template "replicas.fullname" .}}
+  selector:
+    matchLabels:
+      component: {{ template "krakend_api_gateway.fullname" .}}
+  template:
+    metadata:
+      labels:
+        component: {{ template "krakend_api_gateway.fullname" .}}
+    spec:
+      containers:
+        - name: client
+          image: navalta3030/{{ template "krakend_api_gateway.fullname" .}}
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+---
+apiVersion: {{ template "version.fullname" .}}
+kind: Service
+metadata:
+  name: {{ template "krakend_api_gateway.fullname" .}}
+spec:
+  type: ClusterIP
+  selector:
+    component: {{ template "krakend_api_gateway.fullname" .}}
+  ports:
+    - name: endpoint
+      port: 8080

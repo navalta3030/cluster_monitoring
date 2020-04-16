@@ -1,0 +1,3 @@
+krakend_api_gateway: krakend-api-gateway
+replicas: "1"
+version: "v1"
