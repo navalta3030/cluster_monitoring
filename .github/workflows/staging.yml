@@ -38,6 +38,11 @@ jobs:
 
     - name: Deploy - Ingress
       run: helm upgrade --install ingress ./ingress/ingress-charts
+    
+    - name: Deploy - Prometheus operator
+      run : |
+        helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+        helm install  monitoring-gp stable/prometheus-operator -n monitoring-gp
 
     - name: Get nodes
       run: kubectl get nodes
