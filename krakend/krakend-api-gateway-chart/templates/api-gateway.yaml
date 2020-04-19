@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         component: {{ template "krakend_api_gateway.fullname" .}}
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
         - name: client
