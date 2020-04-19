@@ -2,6 +2,8 @@ apiVersion: extensions/{{ template "ingress_version.fullname" .}}
 kind: Ingress
 metadata:
   name: ingress-nginx
+  annotations:
+    custom.nginx.org/auto-deployment-helper: {{ randAlphaNum 5 | quote }}
 spec:
   rules:
     - host: xray.marknavalta.com
