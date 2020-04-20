@@ -4,6 +4,7 @@ metadata:
   name: ingress-nginx-default
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
     custom.nginx.org/auto-deployment-helper: {{ randAlphaNum 5 | quote }}
 spec:
   rules:
@@ -14,7 +15,7 @@ spec:
             backend:
               serviceName: react-client
               servicePort: 3000
-          - path: /api # sanic-server
+          - path: /api/(.+) # sanic-server
             backend:
               serviceName: krakend-api-gateway
               servicePort: 8080
