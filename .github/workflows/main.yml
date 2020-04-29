@@ -46,9 +46,9 @@ jobs:
       run : |
         helm upgrade --install monitoring-gp stable/prometheus-operator -f ./gp/monitoring-gp.yaml --namespace monitoring-gp
 
-    - name: Deploy - ElasticSearch
-      run : |
-        helm upgrade --install monitoring-elk stable/elastic-stack --namespace monitoring-elk
+    # - name: Deploy - ElasticSearch
+    #   run : |
+    #     helm upgrade --install monitoring-elk stable/elastic-stack --namespace monitoring-elk
 
     - name: Get nodes
       run: kubectl get nodes
