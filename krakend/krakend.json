@@ -6,7 +6,7 @@
   "timeout": "3s",
   "endpoints": [
     {
-      "endpoint": "/api",
+      "endpoint": "/api/{route}",
       "method": "GET",
       "output_encoding": "json",
       "backend": [
@@ -14,7 +14,20 @@
           "host": [
             "http://sanic-server:8000"
           ],
-          "url_pattern": "/"
+          "url_pattern": "/{route}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/{route}",
+      "method": "POST",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "host": [
+            "http://sanic-server:8000"
+          ],
+          "url_pattern": "/{route}"
         }
       ],
       "extra_config": {

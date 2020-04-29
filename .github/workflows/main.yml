@@ -39,6 +39,17 @@ jobs:
     - name: Deploy - Ingress
       run: helm upgrade --install ingress ./ingress/ingress-charts
 
+    - name: Helm - Add repo
+      run : helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+    
+    - name: Deploy - Prometheus operator
+      run : |
+        helm upgrade --install monitoring-gp stable/prometheus-operator -f ./gp/monitoring-gp.yaml --namespace monitoring-gp
+
+    - name: Deploy - ElasticSearch
+      run : |
+        helm upgrade --install monitoring-elk stable/elastic-stack --namespace monitoring-elk
+
     - name: Get nodes
       run: kubectl get nodes
 
