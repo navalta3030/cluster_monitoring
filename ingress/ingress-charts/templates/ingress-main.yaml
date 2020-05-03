@@ -11,10 +11,10 @@ metadata:
     custom.nginx.org/auto-deployment-helper: {{ randAlphaNum 5 | quote }}
 spec:
   rules:
-    - host: health.marknavalta.com
+    - host: "health.marknavalta.com"
       http:
         paths:
-          - path: /
+          - path: /?(.+)
             backend:
               serviceName: react-client
               servicePort: 3000
@@ -26,10 +26,6 @@ spec:
             backend:
               serviceName: go-jwt
               servicePort: 8020
-          - path: /(.+)
-            backend:
-              serviceName: react-client
-              servicePort: 3000
 
 ---
 
@@ -43,7 +39,6 @@ metadata:
     custom.nginx.org/auto-deployment-helper: {{ randAlphaNum 5 | quote }}
 spec:
   rules:
-
     - host: monitoring-gp.marknavalta.com
       http:
         paths:
