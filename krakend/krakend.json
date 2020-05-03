@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "name": "KrakenD on k8s",
+  "port": 8080,
+  "cache_ttl": "3600s",
+  "timeout": "10s",
+  "endpoints": [
+    {
+      "endpoint": "/api/{route}",
+      "method": "GET",
+      "backend": [
+        {
+          "host": [
+            "http://image-upload-server:8021"
+          ],
+          "url_pattern": "/{route}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/{route}",
+      "method": "POST",
+      "backend": [
+        {
+          "host": [
+            "http://image-upload-server:8021"
+          ],
+          "url_pattern": "/{route}"
+        }
+      ],
+      "extra_config": {
+        "github.com/devopsfaith/krakend-jose/validator": {
+          "alg": "HS256",
+          "issuer": "https://xray.marknavalta.com",
+          "jwk-url": "http://go-jwt:8020/auth.json",
+          "disable_jwk_security": true
+        }
+      }
+    }
+  ]
+}

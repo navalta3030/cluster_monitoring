@@ -1,0 +1,45 @@
+name: Staging
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build the Docker image - Krakend
+      run: docker build -f ./krakend/Dockerfile ./krakend -t navalta3030/krakend-api-gateway
+    
+    - name: Login to the Docker Hub 
+      run: docker login -u navalta3030 -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+    
+    - name: Push to Docker hub - Krakend
+      run: docker push navalta3030/krakend-api-gateway
+      
+    - name: Set up kubectl
+      uses: matootie/dokube@v1.3.0
+      with:
+        personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
+        clusterName: xray-production
+        version: "1.17.4"
+    
+    - name: Install helm
+      run: |
+        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        chmod 700 get_helm.sh
+        ./get_helm.sh
+    
+    - name: Deploy - Krakend
+      run: helm upgrade --install krakend-api-gateway ./krakend/krakend-api-gateway-chart
+
+    - name: Deploy - Ingress
+      run: helm upgrade --install ingress ./ingress/ingress-charts
+
+    - name: Get nodes
+      run: kubectl get nodes
+
+    

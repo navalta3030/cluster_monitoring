@@ -1,0 +1,77 @@
+apiVersion: extensions/{{ template "ingress_version.fullname" .}}
+kind: Ingress
+metadata:
+  name: ingress-nginx-default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/client-body-buffer-size: "3M"
+    nginx.ingress.kubernetes.io/proxy-body-size: "3M"
+    custom.nginx.org/auto-deployment-helper: {{ randAlphaNum 5 | quote }}
+spec:
+  rules:
+    - host: health.marknavalta.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: react-client
+              servicePort: 3000
+          - path: /api/(.+) # sanic-server
+            backend:
+              serviceName: krakend-api-gateway
+              servicePort: 8080
+          - path: /token
+            backend:
+              serviceName: go-jwt
+              servicePort: 8020
+          - path: /(.+)
+            backend:
+              serviceName: react-client
+              servicePort: 3000
+
+---
+
+apiVersion: extensions/{{ template "ingress_version.fullname" .}}
+kind: Ingress
+metadata:
+  name: ingress-nginx-gp
+  namespace: monitoring-gp
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    custom.nginx.org/auto-deployment-helper: {{ randAlphaNum 5 | quote }}
+spec:
+  rules:
+
+    - host: monitoring-gp.marknavalta.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: monitoring-gp-grafana
+              servicePort: 80
+
+---
+
+# apiVersion: extensions/{{ template "ingress_version.fullname" .}}
+# kind: Ingress
+# metadata:
+#   name: ingress-nginx-elk
+#   namespace: monitoring-elk
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     custom.nginx.org/auto-deployment-helper: {{ randAlphaNum 5 | quote }}
+# spec:
+#   rules:
+#     - host: monitoring-elk.marknavalta.com
+#       http:
+#         paths:
+#           - path: /
+#             backend:
+#               serviceName: monitoring-elk-kibana
+#               servicePort: 5601
+---
+
+
+
